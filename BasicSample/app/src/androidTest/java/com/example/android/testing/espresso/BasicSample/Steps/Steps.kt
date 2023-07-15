@@ -6,7 +6,7 @@ import com.example.android.testing.espresso.BasicSample.tap
 import com.example.android.testing.espresso.BasicSample.typeText
 import org.junit.Assert
 
-class Steps {
+object Steps {
     val matchers: Matchers = Matchers;
     fun changeText(text:String)
     {

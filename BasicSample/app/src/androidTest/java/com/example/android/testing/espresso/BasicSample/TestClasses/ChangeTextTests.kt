@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 class ChangeTextTests {
     @get:Rule
     var activityScenarioRule = activityScenarioRule<MainActivity>()
-    val steps: Steps = Steps()
+    val steps: Steps = Steps
     @Test
     fun changeTextTestOne()
     {
