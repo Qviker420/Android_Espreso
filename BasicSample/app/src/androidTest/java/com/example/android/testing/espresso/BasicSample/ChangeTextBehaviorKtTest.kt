@@ -30,7 +30,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.example.android.testing.espresso.BasicSample.Steps.Steps
 import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
@@ -56,12 +55,37 @@ class ChangeTextBehaviorKtTest {
      * [androidx.test.rule.ActivityTestRule].
      */
     @get:Rule var activityScenarioRule = activityScenarioRule<MainActivity>()
-    val steps:Steps = Steps()
+
     @Test
     fun changeText_sameActivity() {
-        steps.changeText(steps.matchers.STRING_TO_BE_TYPED)
-        steps.clickChangeButton()
-        steps.validateChangedText(steps.matchers.STRING_TO_BE_TYPED)
+
+        // Type text and then press the button.
+        onView(withId(R.id.editTextUserInput))
+                .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard())
+        onView(withId(R.id.changeTextBt)).perform(click())
+
+        logOutButtonMatcher.tap()
+        logOutButtonMatcher.wait(5)
+
+
+        // Check that the text was changed.
+        onView(withId(R.id.textToBeChanged)).check(matches(withText(STRING_TO_BE_TYPED)))
     }
 
+    @Test
+    fun changeText_newActivity() {
+        // Type text and then press the button.
+        onView(withId(R.id.editTextUserInput)).perform(typeText(STRING_TO_BE_TYPED),
+                closeSoftKeyboard())
+        onView(withId(R.id.activityChangeTextBtn)).perform(click())
+
+        // This view is in a different Activity, no need to tell Espresso.
+        onView(withId(R.id.show_text_view)).check(matches(withText(STRING_TO_BE_TYPED)))
+    }
+
+    companion object {
+
+        val STRING_TO_BE_TYPED = "Espresso"
+        val logOutButtonMatcher: Matcher<View> by lazy { withId(R.id.editTextUserInput) }
+    }
 }
